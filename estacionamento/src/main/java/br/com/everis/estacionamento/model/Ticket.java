@@ -13,7 +13,7 @@ import com.sun.istack.NotNull;
 public class Ticket {
 
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private LocalDate dataEntrada;
@@ -27,6 +27,8 @@ public class Ticket {
 	
 	@NotNull 
 	private String marca;
+	
+	private Double pagar; 
 	
 	public Ticket() {
 		dataEntrada = LocalDate.now();
@@ -71,6 +73,14 @@ public class Ticket {
 		this.placa = placa;
 	}
 
+	public Double getPagar() {
+		return pagar;
+	}
+
+	public void setPagar(Double pagar) {
+		this.pagar = pagar;
+	}
+
 	public String getModelo() {
 		return modelo;
 	}
@@ -86,6 +96,7 @@ public class Ticket {
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
+	
 	
 	
 }
