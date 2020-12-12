@@ -1,8 +1,8 @@
 package br.com.everis.estacionamento.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +14,8 @@ import com.sun.istack.NotNull;
 @Entity	
 public class Ticket {
 
+	private static float PRECOFIXO = 5;
+	private static float PRECOHORA = 2;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -21,6 +23,8 @@ public class Ticket {
 	private LocalDateTime dataEntrada;
 	
 	private LocalDateTime dataSaida;
+	
+	private float tempoTotal;
 	@NotNull 
 	private String placa;
 	
@@ -30,7 +34,7 @@ public class Ticket {
 	@NotNull 
 	private String marca;
 	
-	private Double pagar; 
+	private float pagar; 
 	
 	public Ticket() {
 		dataEntrada = LocalDateTime.now(ZoneId.of("GMT-3"));
@@ -77,11 +81,11 @@ public class Ticket {
 		this.placa = placa;
 	}
 
-	public Double getPagar() {
+	public float getPagar() {
 		return pagar;
 	}
 
-	public void setPagar(Double pagar) {
+	public void setPagar(float pagar) {
 		this.pagar = pagar;
 	}
 
@@ -101,11 +105,39 @@ public class Ticket {
 		this.marca = marca;
 	}
 	
-//	public static double precoAPagar(Ticket ticket) {
-//		if(ticket.dataSaida==null) {
-//			LocalDate provisorio = LocalDate.now(ZoneId.of("GMT-3"));
-//			
-//		}
-//	}
+	
+	
+	public float fixarSaida() {
+		dataSaida= LocalDateTime.now(ZoneId.of("GMT-3"));
+		tempoTotal = ChronoUnit.HOURS.between(this.dataEntrada, this.dataSaida);
+		if(tempoTotal<1) {
+			pagar=PRECOFIXO;
+		}else {
+			float horas = tempoTotal - 1;
+			pagar = (horas *PRECOFIXO) +PRECOHORA;
+		}
+		return pagar;
+	}
+	
+	public static float precoAPagar(Ticket ticket) {
+		if(ticket.dataSaida==null) {
+			LocalDateTime provisorio = LocalDateTime.now(ZoneId.of("GMT-3"));
+			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, provisorio); 
+			if(horas<1) {
+				return Ticket.PRECOFIXO;
+			}else {
+				horas--;
+				return (horas *PRECOFIXO) +PRECOHORA;
+			}
+		}else {
+			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, ticket.dataSaida); 
+			if(horas<1) {
+				return 5;
+			}else {
+				horas--;
+				return (horas *PRECOFIXO) +PRECOHORA;
+			}
+		}
+	}
 	
 }
