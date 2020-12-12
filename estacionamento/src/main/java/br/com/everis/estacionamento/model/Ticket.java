@@ -1,6 +1,8 @@
 package br.com.everis.estacionamento.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +18,9 @@ public class Ticket {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private LocalDate dataEntrada;
+	private LocalDateTime dataEntrada;
 	
-	private LocalDate dataSaida;
+	private LocalDateTime dataSaida;
 	@NotNull 
 	private String placa;
 	
@@ -31,11 +33,13 @@ public class Ticket {
 	private Double pagar; 
 	
 	public Ticket() {
-		dataEntrada = LocalDate.now();
+		dataEntrada = LocalDateTime.now(ZoneId.of("GMT-3"));
+		
 	}
 
 	public Ticket(String placa, String modelo, String marca) {
-		dataEntrada = LocalDate.now();
+
+		dataEntrada = LocalDateTime.now(ZoneId.of("GMT-3"));
 		this.placa = placa;
 		this.modelo = modelo;
 		this.marca = marca;
@@ -49,19 +53,19 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public LocalDate getDataEntrada() {
+	public LocalDateTime getDataEntrada() {
 		return dataEntrada;
 	}
 
-	public void setDataEntrada(LocalDate dataEntrada) {
+	public void setDataEntrada(LocalDateTime dataEntrada) {
 		this.dataEntrada = dataEntrada;
 	}
 
-	public LocalDate getDataSaida() {
+	public LocalDateTime getDataSaida() {
 		return dataSaida;
 	}
 
-	public void setDataSaida(LocalDate dataSaida) {
+	public void setDataSaida(LocalDateTime dataSaida) {
 		this.dataSaida = dataSaida;
 	}
 
@@ -97,6 +101,11 @@ public class Ticket {
 		this.marca = marca;
 	}
 	
-	
+//	public static double precoAPagar(Ticket ticket) {
+//		if(ticket.dataSaida==null) {
+//			LocalDate provisorio = LocalDate.now(ZoneId.of("GMT-3"));
+//			
+//		}
+//	}
 	
 }

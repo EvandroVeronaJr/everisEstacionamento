@@ -1,6 +1,6 @@
 package br.com.everis.estacionamento.controller.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,8 +10,8 @@ public class TicketDto {
 	
 
 	private Long id;
-	private LocalDate dataEntrada;
-	private LocalDate dataSaida;
+	private LocalDateTime dataEntrada;
+	private LocalDateTime dataSaida;
 	private String placa;
 	private String modelo;
 	private String marca;
@@ -29,10 +29,10 @@ public class TicketDto {
 	public Long getId() {
 		return id;
 	}
-	public LocalDate getDataEntrada() {
+	public LocalDateTime getDataEntrada() {
 		return dataEntrada;
 	}
-	public LocalDate getDataSaida() {
+	public LocalDateTime getDataSaida() {
 		return dataSaida;
 	}
 	public String getPlaca() {

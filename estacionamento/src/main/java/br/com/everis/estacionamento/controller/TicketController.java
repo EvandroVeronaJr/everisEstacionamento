@@ -21,36 +21,40 @@ import br.com.everis.estacionamento.repository.TicketRepository;
 @RestController
 @RequestMapping("/ticket")
 public class TicketController {
-	
+
 	@Autowired
 	TicketRepository ticketRepository;
-	
+
 	@PutMapping
 	public String creation() {
-		Ticket tck = new Ticket("asd-1234","wv","sadf"); 
-		Ticket tck1 = new Ticket("igd-6879","wv","sadf"); 
-		Ticket tck2 = new Ticket("ogx-9534","ferrari","sadf"); 
-		
+		Ticket tck = new Ticket("asd-1234", "wv", "sadf");
+		Ticket tck1 = new Ticket("igd-6879", "wv", "sadf");
+		Ticket tck2 = new Ticket("ogx-9534", "ferrari", "sadf");
+
 		ticketRepository.save(tck);
 		ticketRepository.save(tck1);
 		ticketRepository.save(tck2);
 		return "criado";
 	}
-	
+
 	@GetMapping
-	public List<TicketDto> registros() {
-		List<Ticket> tickets = ticketRepository.findAll();
-		
+	public List<TicketDto> registros(String placa) {
+		List<Ticket> tickets;
+		if (placa == null) {
+			tickets = ticketRepository.findAll();
+		} else {
+			tickets = ticketRepository.findByPlaca(placa);
+		}
 		return TicketDto.convercao(tickets);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<TicketDto> cadastro(@RequestBody TicketForm ticketF, UriComponentsBuilder uriBuilder) {
 		Ticket ticket = ticketF.converter();
 		ticketRepository.save(ticket);
-		
+
 		URI uri = uriBuilder.path("/ticket/{id}").buildAndExpand(ticket.getId()).toUri();
 		return ResponseEntity.created(uri).body(new TicketDto(ticket));
 	}
-	
+
 }
