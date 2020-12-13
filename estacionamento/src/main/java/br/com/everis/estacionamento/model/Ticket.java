@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
@@ -25,13 +26,13 @@ public class Ticket {
 	private LocalDateTime dataSaida;
 	
 	private float tempoTotal;
-	@NotNull 
+	@NotNull @NotEmpty
 	private String placa;
 	
-	@NotNull 
+	@NotNull @NotEmpty
 	private String modelo;
 	
-	@NotNull 
+	@NotNull @NotEmpty
 	private String marca;
 	
 	private float pagar; 
@@ -104,7 +105,6 @@ public class Ticket {
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
-	
 	
 	
 	public float fixarSaida() {
