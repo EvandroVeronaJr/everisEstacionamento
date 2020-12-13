@@ -75,5 +75,7 @@ public class TicketController {
 		System.out.println(ticket.fixarSaida());
 		return ResponseEntity.ok(new TicketDto(ticket));
 	}
+	
+	
 
 }
