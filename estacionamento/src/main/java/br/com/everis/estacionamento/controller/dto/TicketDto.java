@@ -1,6 +1,6 @@
 package br.com.everis.estacionamento.controller.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,12 +10,12 @@ public class TicketDto {
 	
 
 	private Long id;
-	private LocalDate dataEntrada;
-	private LocalDate dataSaida;
+	private LocalDateTime dataEntrada;
+	private LocalDateTime dataSaida;
 	private String placa;
 	private String modelo;
 	private String marca;
-	
+	private float pagar; 
 		
 	
 	public TicketDto(Ticket ticket) {
@@ -25,26 +25,65 @@ public class TicketDto {
 		this.placa = ticket.getPlaca();
 		this.modelo = ticket.getModelo();
 		this.marca = ticket.getMarca();
+		this.pagar = ticket.getPagar();
 	}
+	
 	public Long getId() {
 		return id;
 	}
-	public LocalDate getDataEntrada() {
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getDataEntrada() {
 		return dataEntrada;
 	}
-	public LocalDate getDataSaida() {
+
+	public void setDataEntrada(LocalDateTime dataEntrada) {
+		this.dataEntrada = dataEntrada;
+	}
+
+	public LocalDateTime getDataSaida() {
 		return dataSaida;
 	}
+
+	public void setDataSaida(LocalDateTime dataSaida) {
+		this.dataSaida = dataSaida;
+	}
+
 	public String getPlaca() {
 		return placa;
 	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+
 	public String getModelo() {
 		return modelo;
 	}
+
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+
 	public String getMarca() {
 		return marca;
 	}
-	
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+
+	public float getPagar() {
+		return pagar;
+	}
+
+	public void setPagar(float pagar) {
+		this.pagar = pagar;
+	}
+
 	public static List<TicketDto> convercao(List<Ticket> tickets){
 		return tickets.stream().map(TicketDto::new).collect(Collectors.toList());
 	}

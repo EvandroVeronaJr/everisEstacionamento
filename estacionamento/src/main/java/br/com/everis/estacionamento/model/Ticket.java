@@ -1,44 +1,65 @@
 package br.com.everis.estacionamento.model;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
 @Entity	
 public class Ticket {
 
+	@Transient
+	private static float PRECOFIXO = 5;
+	@Transient
+	private static float PRECOHORA = 2;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private LocalDate dataEntrada;
-	
-	private LocalDate dataSaida;
 	@NotNull 
+	private LocalDateTime dataEntrada;
+	
+	private LocalDateTime dataSaida;
+	
+	private float tempoTotal;
+	@NotNull @NotEmpty
 	private String placa;
 	
-	@NotNull 
+	@NotNull @NotEmpty
 	private String modelo;
 	
-	@NotNull 
+	@NotNull @NotEmpty
 	private String marca;
 	
-	private Double pagar; 
+	
+	private float pagar; 
 	
 	public Ticket() {
-		dataEntrada = LocalDate.now();
 	}
 
 	public Ticket(String placa, String modelo, String marca) {
-		dataEntrada = LocalDate.now();
+
+		dataEntrada = LocalDateTime.now(ZoneId.of("GMT-3"));
 		this.placa = placa;
 		this.modelo = modelo;
 		this.marca = marca;
+	}
+	
+	public float getTempoTotal() {
+		return tempoTotal;
+	}
+
+	public void setTempoTotal(float tempoTotal) {
+		this.tempoTotal = tempoTotal;
 	}
 
 	public Long getId() {
@@ -49,19 +70,19 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public LocalDate getDataEntrada() {
+	public LocalDateTime getDataEntrada() {
 		return dataEntrada;
 	}
 
-	public void setDataEntrada(LocalDate dataEntrada) {
+	public void setDataEntrada(LocalDateTime dataEntrada) {
 		this.dataEntrada = dataEntrada;
 	}
 
-	public LocalDate getDataSaida() {
+	public LocalDateTime getDataSaida() {
 		return dataSaida;
 	}
 
-	public void setDataSaida(LocalDate dataSaida) {
+	public void setDataSaida(LocalDateTime dataSaida) {
 		this.dataSaida = dataSaida;
 	}
 
@@ -73,11 +94,11 @@ public class Ticket {
 		this.placa = placa;
 	}
 
-	public Double getPagar() {
+	public float getPagar() {
 		return pagar;
 	}
 
-	public void setPagar(Double pagar) {
+	public void setPagar(float pagar) {
 		this.pagar = pagar;
 	}
 
@@ -97,6 +118,40 @@ public class Ticket {
 		this.marca = marca;
 	}
 	
+	
+	public float fixarSaida() {
+		dataSaida= LocalDateTime.now(ZoneId.of("GMT-3"));
+		tempoTotal = ChronoUnit.HOURS.between(this.dataEntrada, this.dataSaida);
+		if(tempoTotal<1) {
+			pagar=PRECOFIXO;
+		}else {
+			float horas = tempoTotal - 1;
+			pagar = (horas *PRECOFIXO) +PRECOHORA;
+		}
+		return pagar;
+	}
+	
+	public static float precoAPagar(Ticket ticket) {
+		if(ticket.dataSaida==null) {
+			LocalDateTime provisorio = LocalDateTime.now(ZoneId.of("GMT-3"));
+			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, provisorio); 
+			if(horas<1) {
+				return Ticket.PRECOFIXO;
+			}else {
+				horas--;
+				return (horas *PRECOFIXO) +PRECOHORA;
+			}
+		}else {
+			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, ticket.dataSaida); 
+			if(horas<1) {
+				return 5;
+			}else {
+				horas--;
+				return (horas *PRECOFIXO) +PRECOHORA;
+			}
+		}
+	}
+
 	
 	
 }
