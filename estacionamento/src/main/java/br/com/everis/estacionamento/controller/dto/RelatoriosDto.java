@@ -41,8 +41,7 @@ public class RelatoriosDto {
 		}
 	}
 	
-	public void gerarRelatorio(TicketRepository ticketRepository) {
-		
+	public void gerarRelatorio(TicketRepository ticketRepository) {		
 		for (Ticket ticket : ticketRepository.findAll()) {
 			if (ticket.getDataEntrada().isAfter(dataComeco) && ticket.getDataEntrada().isBefore(dataFinal)) {
 				analizados.add(ticket);			}
