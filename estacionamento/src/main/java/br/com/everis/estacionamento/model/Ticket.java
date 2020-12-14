@@ -2,6 +2,7 @@ package br.com.everis.estacionamento.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
-@Entity	
+@Entity
 public class Ticket {
 
 	@Transient
@@ -21,29 +22,34 @@ public class Ticket {
 	@Transient
 	private static float PRECOHORA = 2;
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private LocalDateTime dataEntrada;
-	
+
 	private LocalDateTime dataSaida;
-	
+
 	private float tempoTotal;
-	@NotNull @NotEmpty
+	@NotNull
+	@NotEmpty
 	private String placa;
-	
-	@NotNull @NotEmpty
+
+	@NotNull
+	@NotEmpty
 	private String modelo;
-	
-	@NotNull @NotEmpty
+
+	@NotNull
+	@NotEmpty
 	private String marca;
-	
-	
-	private float pagar; 
-	
+
+	private float pagar;
+
+	private boolean completo;
+
 	public Ticket() {
 		dataEntrada = LocalDateTime.now(ZoneId.of("GMT-3"));
-		
+		this.completo = false;
 	}
 
 	public Ticket(String placa, String modelo, String marca) {
@@ -52,9 +58,10 @@ public class Ticket {
 		this.placa = placa;
 		this.modelo = modelo;
 		this.marca = marca;
+		this.completo = false;
 	}
-	
-		public float getTempoTotal() {
+
+	public float getTempoTotal() {
 		return tempoTotal;
 	}
 
@@ -117,41 +124,60 @@ public class Ticket {
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
-	
-	
+
+	public boolean isCompleto() {
+		return completo;
+	}
+
+	public void setCompleto(boolean completo) {
+		this.completo = completo;
+	}
+
 	public float fixarSaida() {
-		dataSaida= LocalDateTime.now(ZoneId.of("GMT-3"));
-		tempoTotal = ChronoUnit.HOURS.between(this.dataEntrada, this.dataSaida);
-		if(tempoTotal<1) {
-			pagar=PRECOFIXO;
-		}else {
+		this.dataSaida = LocalDateTime.now(ZoneId.of("GMT-3"));
+		this.tempoTotal = ChronoUnit.HOURS.between(this.dataEntrada, this.dataSaida);
+		this.completo = true;
+		if (tempoTotal < 1) {
+			pagar = PRECOFIXO;
+		} else {
 			float horas = tempoTotal - 1;
-			pagar = (horas *PRECOFIXO) +PRECOHORA;
+			pagar = (horas * PRECOFIXO) + PRECOHORA;
 		}
 		return pagar;
 	}
-	
+
+	public float fixarSaida(LocalDateTime saida) {
+		this.dataSaida = saida;
+		this.tempoTotal = ChronoUnit.HOURS.between(this.dataEntrada, this.dataSaida);
+		this.completo = true;
+		if (tempoTotal < 1) {
+			pagar = PRECOFIXO;
+		} else {
+			float horas = tempoTotal - 1;
+			pagar = (horas * PRECOFIXO) + PRECOHORA;
+		}
+		return pagar;
+	}
+
 	public static float precoAPagar(Ticket ticket) {
-		if(ticket.dataSaida==null) {
+		if (ticket.dataSaida == null) {
 			LocalDateTime provisorio = LocalDateTime.now(ZoneId.of("GMT-3"));
-			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, provisorio); 
-			if(horas<1) {
+			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, provisorio);
+			if (horas < 1) {
 				return Ticket.PRECOFIXO;
-			}else {
+			} else {
 				horas--;
-				return (horas *PRECOFIXO) +PRECOHORA;
+				return (horas * PRECOFIXO) + PRECOHORA;
 			}
-		}else {
-			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, ticket.dataSaida); 
-			if(horas<1) {
+		} else {
+			float horas = ChronoUnit.HOURS.between(ticket.dataEntrada, ticket.dataSaida);
+			if (horas < 1) {
 				return 5;
-			}else {
+			} else {
 				horas--;
-				return (horas *PRECOFIXO) +PRECOHORA;
+				return (horas * PRECOFIXO) + PRECOHORA;
 			}
 		}
 	}
 
-	
-	
 }
