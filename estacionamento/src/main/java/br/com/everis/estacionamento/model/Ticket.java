@@ -141,7 +141,7 @@ public class Ticket {
 			pagar = PRECOFIXO;
 		} else {
 			float horas = tempoTotal - 1;
-			pagar = (horas * PRECOFIXO) + PRECOHORA;
+			pagar = (horas * PRECOHORA) + PRECOFIXO;
 		}
 		return pagar;
 	}
@@ -154,7 +154,7 @@ public class Ticket {
 			pagar = PRECOFIXO;
 		} else {
 			float horas = tempoTotal - 1;
-			pagar = (horas * PRECOFIXO) + PRECOHORA;
+			pagar = (horas * PRECOHORA) + PRECOFIXO;
 		}
 		return pagar;
 	}

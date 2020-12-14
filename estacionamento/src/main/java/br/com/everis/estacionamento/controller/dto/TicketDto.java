@@ -12,6 +12,7 @@ public class TicketDto {
 	private Long id;
 	private LocalDateTime dataEntrada;
 	private LocalDateTime dataSaida;
+	private float tempoTotal;
 	private String placa;
 	private String modelo;
 	private String marca;
@@ -26,6 +27,7 @@ public class TicketDto {
 		this.modelo = ticket.getModelo();
 		this.marca = ticket.getMarca();
 		this.pagar = ticket.getPagar();
+		this.tempoTotal = ticket.getTempoTotal();
 	}
 	
 	public Long getId() {
@@ -82,6 +84,15 @@ public class TicketDto {
 
 	public void setPagar(float pagar) {
 		this.pagar = pagar;
+	}
+	
+
+	public float getTempoTotal() {
+		return tempoTotal;
+	}
+
+	public void setTempoTotal(float tempoTotal) {
+		this.tempoTotal = tempoTotal;
 	}
 
 	public static List<TicketDto> convercao(List<Ticket> tickets){

@@ -83,6 +83,12 @@ public class TicketController {
 		}
 		return TicketDto.convercao(tickets);
 	}
+	
+	@GetMapping("/ticket/{id}")
+	public TicketDto registros(@PathVariable Long id) {
+		Ticket ticket = ticketRepository.getOne(id);
+		return new TicketDto(ticket);
+	}
 
 	@PostMapping("/ticket")
 	public ResponseEntity<TicketDto> cadastro(@RequestBody TicketForm ticketF, UriComponentsBuilder uriBuilder) {
@@ -111,18 +117,19 @@ public class TicketController {
 	@PutMapping("/saida")
 	@Transactional
 	public ResponseEntity<TicketDto> fechamentoPlaca(String placa){
-		
 		Ticket ticket = null;
 		for (Ticket tct : ticketRepository.findByPlaca(placa)) {
 			if(!tct.isCompleto()) {
 				ticket = tct;
+				break;
 			}
 		}
 		if(ticket != null) {
 			ticket.fixarSaida();
 			return ResponseEntity.ok(new TicketDto(ticket));			
 		}else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		}
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);	
+		}
 	}
 	
 	
@@ -131,6 +138,4 @@ public class TicketController {
 		relatorioDTO.gerarRelatorio(ticketRepository);		
 		return ResponseEntity.ok(relatorioDTO);
 	}
-	
-	
 }
