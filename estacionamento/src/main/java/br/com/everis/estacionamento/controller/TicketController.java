@@ -1,6 +1,7 @@
 package br.com.everis.estacionamento.controller;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -30,13 +31,21 @@ public class TicketController {
 	TicketRepository ticketRepository;
 
 	
+//	@GetMapping("/popular")
+//	public String popular() {
+//		for(int i = 0; i<Math.random()*(Math.random()*100);i++) {
+//			Ticket tck = new Ticket("asd-1234", "wv", "sadf");
+//			tck.setDataEntrada(LocalDateTime.);
+//			ticketRepository.save(tck);			
+//		}
+//	}
+	
+	
 	@GetMapping("/test")
 	public String creation() {
-		Ticket tck = new Ticket("asd-1234", "wv", "sadf");
 		Ticket tck1 = new Ticket("igd-6879", "wv", "sadf");
 		Ticket tck2 = new Ticket("ogx-9534", "ferrari", "sadf");
 
-		ticketRepository.save(tck);
 		ticketRepository.save(tck1);
 		ticketRepository.save(tck2);
 		return "criado";
