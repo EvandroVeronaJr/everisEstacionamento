@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
@@ -15,7 +16,9 @@ import com.sun.istack.NotNull;
 @Entity	
 public class Ticket {
 
+	@Transient
 	private static float PRECOFIXO = 5;
+	@Transient
 	private static float PRECOHORA = 2;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +38,7 @@ public class Ticket {
 	@NotNull @NotEmpty
 	private String marca;
 	
+	
 	private float pagar; 
 	
 	public Ticket() {
@@ -48,6 +52,14 @@ public class Ticket {
 		this.placa = placa;
 		this.modelo = modelo;
 		this.marca = marca;
+	}
+	
+		public float getTempoTotal() {
+		return tempoTotal;
+	}
+
+	public void setTempoTotal(float tempoTotal) {
+		this.tempoTotal = tempoTotal;
 	}
 
 	public Long getId() {
@@ -139,5 +151,7 @@ public class Ticket {
 			}
 		}
 	}
+
+	
 	
 }

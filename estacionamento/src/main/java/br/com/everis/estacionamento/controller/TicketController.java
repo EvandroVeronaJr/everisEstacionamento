@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.everis.estacionamento.controller.dto.RelatoriosDto;
 import br.com.everis.estacionamento.controller.dto.TicketDto;
 import br.com.everis.estacionamento.controller.form.AtualizaTicketForm;
 import br.com.everis.estacionamento.controller.form.TicketForm;
@@ -77,5 +78,11 @@ public class TicketController {
 	}
 	
 	
-
+	@GetMapping("/relatorio")
+	public ResponseEntity<RelatoriosDto> relatorios(@RequestBody RelatoriosDto relatorioDTO){
+		relatorioDTO.gerarRelatorio(ticketRepository);		
+		return ResponseEntity.ok(relatorioDTO);
+	}
+	
+	
 }
