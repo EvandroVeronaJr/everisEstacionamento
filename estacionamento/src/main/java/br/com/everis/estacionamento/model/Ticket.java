@@ -1,6 +1,5 @@
 package br.com.everis.estacionamento.model;
 
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -25,7 +24,6 @@ public class Ticket {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull 
 	private LocalDateTime dataEntrada;
 	
 	private LocalDateTime dataSaida;
@@ -44,6 +42,8 @@ public class Ticket {
 	private float pagar; 
 	
 	public Ticket() {
+		dataEntrada = LocalDateTime.now(ZoneId.of("GMT-3"));
+		
 	}
 
 	public Ticket(String placa, String modelo, String marca) {
@@ -54,7 +54,7 @@ public class Ticket {
 		this.marca = marca;
 	}
 	
-	public float getTempoTotal() {
+		public float getTempoTotal() {
 		return tempoTotal;
 	}
 
